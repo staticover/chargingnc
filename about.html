@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | ChargingNC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0A0E27;
+            --accent: #00E5CC;
+            --accent-dark: #00B8A0;
+            --green: #00FF88;
+            --green-dark: #00CC6A;
+            --text: #E8E9ED;
+            --text-dim: #9BA3B4;
+            --surface: #13172B;
+            --surface-light: #1C2137;
+            --gradient-1: linear-gradient(135deg, #00E5CC 0%, #00FF88 100%);
+            --gradient-2: linear-gradient(135deg, #00FF88 0%, #00E5CC 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 229, 204, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--green);
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--surface);
+            padding: 6rem 2rem 2rem;
+            transition: right 0.4s ease;
+            z-index: 999;
+            border-left: 1px solid var(--accent);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--green);
+        }
+
+        .cta-button {
+            padding: 0.9rem 2rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.02em;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 255, 136, 0.4);
+        }
+
+        /* About Hero */
+        .about-hero {
+            padding: 10rem 5% 6rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--green);
+            border-radius: 50px;
+            color: var(--green);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        /* Story Section */
+        .story {
+            padding: 6rem 5%;
+            background: var(--surface);
+        }
+
+        .story-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .story-content p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+        }
+
+        .story-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Values Section */
+        .values {
+            padding: 8rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-tag {
+            color: var(--green);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .value-card {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--green);
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .value-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .value-description {
+            color: var(--text-dim);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        /* Team Section */
+        .team {
+            padding: 8rem 5%;
+            background: var(--surface);
+        }
+
+        .team-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-content {
+            background: var(--primary);
+            padding: 4rem;
+            border-radius: 16px;
+            border: 1px solid var(--green);
+            margin-top: 3rem;
+        }
+
+        .team-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--green);
+        }
+
+        .team-content p {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--primary);
+            border-top: 1px solid rgba(0, 255, 136, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-info a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-info a:hover {
+            color: var(--green);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .about-hero {
+                padding: 8rem 5% 4rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-content {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">ChargingNC</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="calculator.html">Investment Calculator</a>
+            <a href="contact.html">Contact</a>
+            <a href="contact.html" class="cta-button">Schedule Meeting</a>
+        </div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="calculator.html">Investment Calculator</a>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html" class="cta-button" style="margin-top: 2rem;">Schedule Meeting</a>
+    </div>
+
+    <section class="about-hero">
+        <span class="hero-tag">Our Story</span>
+        <h1>Built on Passion,<br>Driven by Innovation</h1>
+        <p class="hero-subtitle">
+            For over three decades, we've been at the forefront of electric vehicle technology. 
+            What started as a passion project in the 1990s has evolved into North Carolina's 
+            most trusted EV infrastructure partner.
+        </p>
+    </section>
+
+    <section class="story">
+        <div class="story-container">
+            <h2>Our Journey</h2>
+            <div class="story-content">
+                <p>
+                    ChargingNC was born from a deep passion for electric vehicles that dates back to the 1990s. 
+                    While most of the world was still skeptical about EVs, our founders were already building, 
+                    tinkering, and having fun with electric cars. We saw the future before it arrived.
+                </p>
+                <p>
+                    Over the past 30+ years, we've witnessed the evolution of EV technology firsthand—from 
+                    experimental conversions to today's sophisticated electric vehicles. This isn't just a 
+                    business opportunity for us; it's a calling we've answered for decades.
+                </p>
+                <p>
+                    Our team has spent years providing technical guidance to the communications industry, building 
+                    expertise in scalable infrastructure solutions. Now, with North Carolina's rapid EV growth, 
+                    we've channeled that experience into supporting critical charging infrastructure, helping 
+                    businesses and property owners stay ahead in the evolving transportation landscape.
+                </p>
+                <p>
+                    We're not newcomers jumping on a trend. We're longtime advocates who've been championing 
+                    electric transportation since before it was mainstream. Our passion has only grown stronger 
+                    as the technology has matured and the infrastructure gap has become more apparent.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="values">
+        <div class="section-header">
+            <div class="section-tag">What Drives Us</div>
+            <h2>Our Core Values</h2>
+            <p class="section-subtitle">
+                These principles have guided us since day one and continue to define how we work with every partner
+            </p>
+        </div>
+
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">◈</div>
+                <h3 class="value-title">Transparency</h3>
+                <p class="value-description">
+                    We believe in honest, upfront communication. No hidden fees, no surprises. 
+                    You'll always know exactly what to expect from us.
+                </p>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">◆</div>
+                <h3 class="value-title">Integrity</h3>
+                <p class="value-description">
+                    Our reputation is built on doing what's right, not what's easy. We stand behind 
+                    every installation and recommendation we make.
+                </p>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">⚡</div>
+                <h3 class="value-title">Quality</h3>
+                <p class="value-description">
+                    Three decades of experience have taught us that cutting corners costs more in the long run. 
+                    We deliver infrastructure that lasts.
+                </p>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">●</div>
+                <h3 class="value-title">Customer Service</h3>
+                <p class="value-description">
+                    We're not here to just install equipment and leave. We're partners in your success, 
+                    providing ongoing support and expertise.
+                </p>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">►</div>
+                <h3 class="value-title">Innovation</h3>
+                <p class="value-description">
+                    Our passion for EV technology keeps us at the cutting edge. We continuously adapt and 
+                    improve to offer the most advanced solutions.
+                </p>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">♦</div>
+                <h3 class="value-title">Sustainability</h3>
+                <p class="value-description">
+                    Clean transportation isn't just business—it's our mission. We're committed to building 
+                    infrastructure that supports a greener future.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="team">
+        <div class="team-container">
+            <div class="section-header">
+                <div class="section-tag">Who We Are</div>
+                <h2>Expert Team, Local Focus</h2>
+            </div>
+
+            <div class="team-content">
+                <h3>Education & Expertise</h3>
+                <p>
+                    We educate our partners about every aspect of EV charging infrastructure. Understanding charger 
+                    types, power requirements, and installation costs empowers stakeholders to make informed decisions 
+                    that meet both current and future EV charging demands.
+                </p>
+                <p>
+                    Staying informed about incentives, maintenance strategies, and revenue opportunities ensures 
+                    long-term profitability and sustainability in the rapidly expanding EV market.
+                </p>
+
+                <h3>Data-Driven Approach</h3>
+                <p>
+                    We help you define key performance indicators (KPIs) for EV charging infrastructure, ensuring 
+                    efficiency and profitability. These include utilization rate (charger usage frequency), revenue 
+                    per charger (income from sessions and subscriptions), and charger uptime (maintaining high 
+                    availability and reliability).
+                </p>
+
+                <h3>Backed by Expert Electricians</h3>
+                <p>
+                    Our company is built on a foundation of transparency, integrity, quality, and outstanding 
+                    customer service. Since day one, our mission has been to save our customers time, money, and 
+                    frustration by delivering reliable EV charging solutions. Backed by an expert team of electricians, 
+                    we're here to handle any project—big or small—with the knowledge and service you can trust.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Work Together?</h2>
+            <p>
+                Let's discuss how our three decades of EV passion and expertise can help 
+                you capitalize on the infrastructure opportunity.
+            </p>
+            <a href="contact.html" class="cta-button">Schedule a Consultation</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <strong>ChargingNC</strong>
+                <span>Johnson County, North Carolina</span>
+                <a href="tel:9199804074">(919) 980-4074</a>
+                <a href="mailto:[email protected]">[email protected]</a>
+            </div>
+            <div>
+                <p style="color: var(--text-dim); font-size: 0.9rem;">
+                    © 2026 ChargingNC. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
