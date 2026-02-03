@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Investment Calculator | ChargingNC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0A0E27;
+            --accent: #00E5CC;
+            --accent-dark: #00B8A0;
+            --green: #00FF88;
+            --green-dark: #00CC6A;
+            --text: #E8E9ED;
+            --text-dim: #9BA3B4;
+            --surface: #13172B;
+            --surface-light: #1C2137;
+            --gradient-1: linear-gradient(135deg, #00E5CC 0%, #00FF88 100%);
+            --gradient-2: linear-gradient(135deg, #00FF88 0%, #00E5CC 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 229, 204, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--green);
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--surface);
+            padding: 6rem 2rem 2rem;
+            transition: right 0.4s ease;
+            z-index: 999;
+            border-left: 1px solid var(--accent);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--green);
+        }
+
+        .cta-button {
+            padding: 0.9rem 2rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.02em;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 255, 136, 0.4);
+        }
+
+        /* Calculator Hero */
+        .calculator-hero {
+            padding: 10rem 5% 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--green);
+            border-radius: 50px;
+            color: var(--green);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        /* Calculator Section */
+        .calculator {
+            padding: 4rem 5% 8rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--green);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-input-group {
+            margin-bottom: 0;
+        }
+
+        .calculator-input-group label {
+            display: block;
+            color: var(--green);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .calculator-input-group input,
+        .calculator-input-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .calculator-input-group input:focus,
+        .calculator-input-group select:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 3rem;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 255, 136, 0.4);
+        }
+
+        .calculator-results {
+            padding: 3rem;
+            background: var(--primary);
+            border-radius: 12px;
+            border: 2px solid var(--green);
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calculator-results.active {
+            display: block;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .results-header h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--green);
+            margin-bottom: 0.5rem;
+        }
+
+        .results-header p {
+            color: var(--text-dim);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-highlight {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .result-highlight h4 {
+            font-size: 1.3rem;
+            color: var(--green);
+            margin-bottom: 1rem;
+        }
+
+        .result-highlight .big-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .disclaimer {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 5%;
+            background: var(--surface);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--primary);
+            border-top: 1px solid rgba(0, 255, 136, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-info a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-info a:hover {
+            color: var(--green);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .calculator-hero {
+                padding: 8rem 5% 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .calculator-card {
+                padding: 2rem;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-value {
+                font-size: 1.2rem;
+            }
+
+            .result-highlight .big-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">ChargingNC</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="calculator.html">Investment Calculator</a>
+            <a href="contact.html">Contact</a>
+            <a href="contact.html" class="cta-button">Schedule Meeting</a>
+        </div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="calculator.html">Investment Calculator</a>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html" class="cta-button" style="margin-top: 2rem;">Schedule Meeting</a>
+    </div>
+
+    <section class="calculator-hero">
+        <span class="hero-tag">Investment Analysis</span>
+        <h1>Charge Profit<br>Calculator</h1>
+        <p class="hero-subtitle">
+            Get a personalized estimate of how EV charging infrastructure could impact 
+            your property value and revenue streams. Results are indicative and based on market averages.
+        </p>
+    </section>
+
+    <section class="calculator">
+        <div class="calculator-card">
+            <div class="calculator-grid">
+                <div class="calculator-input-group">
+                    <label for="propertyType">Property Type</label>
+                    <select id="propertyType">
+                        <option value="retail">Retail Center</option>
+                        <option value="multifamily">Multifamily Housing</option>
+                        <option value="office">Office Building</option>
+                        <option value="hotel">Hotel/Hospitality</option>
+                        <option value="cstore">Convenience Store</option>
+                        <option value="other">Other Commercial</option>
+                    </select>
+                </div>
+
+                <div class="calculator-input-group">
+                    <label for="propertyValue">Current Property Value ($)</label>
+                    <input type="number" id="propertyValue" placeholder="e.g., 2000000" min="0">
+                </div>
+
+                <div class="calculator-input-group">
+                    <label for="chargerCount">Number of Chargers</label>
+                    <input type="number" id="chargerCount" placeholder="e.g., 6" min="1" value="6">
+                </div>
+
+                <div class="calculator-input-group">
+                    <label for="chargerType">Charger Type</label>
+                    <select id="chargerType">
+                        <option value="level2">Level 2 (Standard)</option>
+                        <option value="dcfast">DC Fast Charging</option>
+                        <option value="mixed">Mixed (Level 2 + DC)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateROI()">Calculate Potential Investment Impact</button>
+
+            <div class="calculator-results" id="results">
+                <div class="results-header">
+                    <h3>Your Estimated Investment Potential</h3>
+                    <p>Based on your property profile and market averages</p>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Potential Property Value Increase</span>
+                    <span class="result-value" id="valueIncrease">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Estimated Annual Revenue Potential</span>
+                    <span class="result-value" id="annualRevenue">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Typical Investment Payback Period</span>
+                    <span class="result-value" id="payback">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Federal Tax Credit Eligibility (up to 30%)</span>
+                    <span class="result-value" id="taxCredit">-</span>
+                </div>
+
+                <div class="result-highlight">
+                    <h4>Total 5-Year Potential Return</h4>
+                    <div class="big-number" id="totalReturn">-</div>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>Important:</strong> These estimates are for illustrative purposes only and represent 
+                    potential ranges based on current market data and industry averages. Actual results vary based 
+                    on location, property characteristics, utilization rates, energy costs, and market conditions. 
+                    Schedule a consultation for a personalized assessment of your specific property.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready for a Detailed Analysis?</h2>
+            <p>
+                Schedule a consultation to get a comprehensive, site-specific investment analysis 
+                tailored to your property and business objectives.
+            </p>
+            <a href="contact.html" class="cta-button">Get Personalized Assessment</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <strong>ChargingNC</strong>
+                <span>Johnson County, North Carolina</span>
+                <a href="tel:9199804074">(919) 980-4074</a>
+                <a href="mailto:[email protected]">[email protected]</a>
+            </div>
+            <div>
+                <p style="color: var(--text-dim); font-size: 0.9rem;">
+                    © 2026 ChargingNC. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+
+        function calculateROI() {
+            const propertyType = document.getElementById('propertyType').value;
+            const propertyValue = parseFloat(document.getElementById('propertyValue').value);
+            const chargerCount = parseInt(document.getElementById('chargerCount').value);
+            const chargerType = document.getElementById('chargerType').value;
+
+            if (!propertyValue || !chargerCount) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Property value multipliers based on type
+            const typeMultipliers = {
+                retail: 1.3,
+                multifamily: 1.25,
+                office: 1.2,
+                hotel: 1.35,
+                cstore: 1.4,
+                other: 1.2
+            };
+
+            // Revenue per charger per year
+            const revenuePerCharger = {
+                level2: 3500,
+                dcfast: 12000,
+                mixed: 7500
+            };
+
+            // Calculate property value increase (20-45% range, adjusted by type)
+            const baseIncreasePercent = 0.25;
+            const adjustedPercent = baseIncreasePercent * typeMultipliers[propertyType];
+            const valueIncrease = propertyValue * adjustedPercent;
+
+            // Calculate annual revenue
+            const annualRevenue = chargerCount * revenuePerCharger[chargerType];
+
+            // Payback period (3-5 years typical)
+            const installCost = chargerType === 'dcfast' ? chargerCount * 80000 : 
+                               chargerType === 'mixed' ? chargerCount * 50000 : 
+                               chargerCount * 25000;
+            const paybackYears = Math.max(3, Math.min(5, Math.round(installCost / annualRevenue)));
+
+            // Tax credit (30% of installation)
+            const taxCredit = installCost * 0.30;
+
+            // 5-year return
+            const totalReturn = (annualRevenue * 5) + valueIncrease - installCost + taxCredit;
+
+            // Display results
+            document.getElementById('valueIncrease').textContent = 
+                '+$' + valueIncrease.toLocaleString('en-US', {maximumFractionDigits: 0});
+            
+            document.getElementById('annualRevenue').textContent = 
+                '$' + annualRevenue.toLocaleString('en-US', {maximumFractionDigits: 0}) + '/year';
+            
+            document.getElementById('payback').textContent = 
+                paybackYears + ' years';
+            
+            document.getElementById('taxCredit').textContent = 
+                '$' + taxCredit.toLocaleString('en-US', {maximumFractionDigits: 0});
+            
+            document.getElementById('totalReturn').textContent = 
+                '$' + totalReturn.toLocaleString('en-US', {maximumFractionDigits: 0});
+
+            // Show results
+            document.getElementById('results').classList.add('active');
+            
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
