@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChargingNC | EV Infrastructure Investment Opportunity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0A0E27;
+            --accent: #00E5CC;
+            --accent-dark: #00B8A0;
+            --green: #00FF88;
+            --green-dark: #00CC6A;
+            --text: #E8E9ED;
+            --text-dim: #9BA3B4;
+            --surface: #13172B;
+            --surface-light: #1C2137;
+            --gradient-1: linear-gradient(135deg, #00E5CC 0%, #00FF88 100%);
+            --gradient-2: linear-gradient(135deg, #00FF88 0%, #00E5CC 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 229, 204, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--green);
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--surface);
+            padding: 6rem 2rem 2rem;
+            transition: right 0.4s ease;
+            z-index: 999;
+            border-left: 1px solid var(--accent);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--green);
+        }
+
+        .cta-button {
+            padding: 0.9rem 2rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.02em;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 255, 136, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.15) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 229, 204, 0.1) 0%, transparent 70%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--green);
+            border-radius: 50px;
+            color: var(--green);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-secondary {
+            padding: 0.9rem 2rem;
+            background: transparent;
+            border: 2px solid var(--green);
+            border-radius: 8px;
+            color: var(--green);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(0, 255, 136, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 5%;
+            background: var(--surface);
+            border-top: 1px solid rgba(0, 255, 136, 0.1);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Value Props */
+        .value-props {
+            padding: 8rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-tag {
+            color: var(--green);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .props-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .prop-card {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prop-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .prop-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .prop-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--green);
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2);
+        }
+
+        .prop-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .prop-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .prop-description {
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        /* Calculator Section */
+        .calculator {
+            padding: 8rem 5%;
+            background: var(--surface);
+        }
+
+        .calculator-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: var(--primary);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--green);
+            margin-top: 3rem;
+        }
+
+        .calculator-input-group {
+            margin-bottom: 2rem;
+        }
+
+        .calculator-input-group label {
+            display: block;
+            color: var(--green);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .calculator-input-group input,
+        .calculator-input-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--surface);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .calculator-input-group input:focus,
+        .calculator-input-group select:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        .calculator-results {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--surface);
+            border-radius: 12px;
+            border: 2px solid var(--green);
+            display: none;
+        }
+
+        .calculator-results.active {
+            display: block;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--text-dim);
+        }
+
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 8rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .testimonial-card {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            position: relative;
+        }
+
+        .quote-icon {
+            font-size: 4rem;
+            color: var(--green);
+            opacity: 0.2;
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+        }
+
+        .stars {
+            color: var(--green);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 8rem 5%;
+            background: var(--surface);
+            text-align: center;
+        }
+
+        .final-cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .final-cta h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .final-cta p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--primary);
+            border-top: 1px solid rgba(0, 255, 136, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-info a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-info a:hover {
+            color: var(--green);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .hero {
+                padding: 6rem 5% 3rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .props-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content > * {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .hero-tag { animation-delay: 0.1s; }
+        h1 { animation-delay: 0.2s; }
+        .hero-subtitle { animation-delay: 0.3s; }
+        .hero-cta-group { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">ChargingNC</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="calculator.html">Investment Calculator</a>
+            <a href="contact.html">Contact</a>
+            <a href="contact.html" class="cta-button">Schedule Meeting</a>
+        </div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="calculator.html">Investment Calculator</a>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html" class="cta-button" style="margin-top: 2rem;">Schedule Meeting</a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-tag">Clean Energy Infrastructure</span>
+            <h1>Turn Property<br>Into Profit</h1>
+            <p class="hero-subtitle">
+                Partner with North Carolina's leading EV charging infrastructure provider. 
+                We help commercial property owners capitalize on the $7.5B federal investment 
+                in EV infrastructure with turnkey charging solutions.
+            </p>
+            <div class="hero-cta-group">
+                <a href="contact.html" class="cta-button">Discuss Investment Opportunity</a>
+                <a href="calculator.html" class="cta-secondary">Run Investment Calculator</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">$7.5B</div>
+                <div class="stat-label">Federal EV Infrastructure Investment</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">45%</div>
+                <div class="stat-label">Increase in Property Value</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3-5yr</div>
+                <div class="stat-label">Typical Investment Payback</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">NC-Based Installation & Support</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="value-props" id="value">
+        <div class="section-header">
+            <div class="section-tag">Investment Opportunity</div>
+            <h2>Why Smart Investors<br>Are Moving Now</h2>
+            <p class="section-subtitle">
+                EV adoption is accelerating. Federal incentives are massive. 
+                The infrastructure gap is real. Position your property ahead of the curve.
+            </p>
+        </div>
+
+        <div class="props-grid">
+            <div class="prop-card">
+                <div class="prop-icon">$</div>
+                <h3 class="prop-title">Revenue Generation</h3>
+                <p class="prop-description">
+                    Create new income streams through charging fees, increased foot traffic, 
+                    and premium parking rates. Properties with EV charging command 20-30% higher lease rates.
+                </p>
+            </div>
+
+            <div class="prop-card">
+                <div class="prop-icon">↗</div>
+                <h3 class="prop-title">Property Value Appreciation</h3>
+                <p class="prop-description">
+                    EV-ready properties are increasingly valued by institutional investors and tenants. 
+                    Studies show up to 45% increase in property valuation with charging infrastructure.
+                </p>
+            </div>
+
+            <div class="prop-card">
+                <div class="prop-icon">★</div>
+                <h3 class="prop-title">Federal Incentives</h3>
+                <p class="prop-description">
+                    Leverage up to 30% tax credits and substantial rebates from the Infrastructure Investment 
+                    and Jobs Act. We handle all compliance and paperwork to maximize your benefits.
+                </p>
+            </div>
+
+            <div class="prop-card">
+                <div class="prop-icon">∞</div>
+                <h3 class="prop-title">Future-Proof Asset</h3>
+                <p class="prop-description">
+                    By 2030, 40% of vehicles sold will be electric. Properties without charging infrastructure 
+                    will face declining competitiveness. Secure your position now.
+                </p>
+            </div>
+
+            <div class="prop-card">
+                <div class="prop-icon">▲</div>
+                <h3 class="prop-title">Tenant Attraction & Retention</h3>
+                <p class="prop-description">
+                    Commercial tenants increasingly require EV amenities. Charging infrastructure reduces 
+                    vacancy rates and justifies premium rents across all property types.
+                </p>
+            </div>
+
+            <div class="prop-card">
+                <div class="prop-icon">⚡</div>
+                <h3 class="prop-title">Scalable Infrastructure</h3>
+                <p class="prop-description">
+                    Start with Level 2 charging, scale to DC fast charging as demand grows. 
+                    Our modular approach lets you expand without costly infrastructure overhauls.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="section-header">
+            <div class="section-tag">Proven Results</div>
+            <h2>What Our Partners Say</h2>
+            <p class="section-subtitle">
+                Real results from property owners who invested in EV infrastructure
+            </p>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="quote-icon">"</div>
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">
+                    EV charging additions have truly transformed the way we engage with our customers 
+                    and community. Thanks to ChargingNC, we now attract more visitors, increase dwell time, 
+                    and enhance our property's value—all while supporting a greener future. Their expertise 
+                    and seamless installation process made the transition effortless, and we couldn't be 
+                    happier with the results!
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SL</div>
+                    <div class="author-info">
+                        <h4>Sam Lewis</h4>
+                        <p>Property Owner</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="quote-icon">"</div>
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">
+                    We struggled to decide when and how to deploy charging infrastructure at our sites. 
+                    ChargingNC provided the expertise and guidance we needed, helping us navigate the 
+                    process with confidence. Now, with a clear roadmap in place, we're set up for success 
+                    and ready to meet the growing demand for EV charging.
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JP</div>
+                    <div class="author-info">
+                        <h4>Jane Parker</h4>
+                        <p>Johnson County, NC</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta" id="contact">
+        <div class="final-cta-content">
+            <h2>Ready to Capitalize on<br>the EV Infrastructure Boom?</h2>
+            <p>
+                Schedule a consultation to discuss how EV charging infrastructure can 
+                increase your property value and create new revenue streams.
+            </p>
+            <a href="tel:9199804074" class="cta-button">Call (919) 980-4074</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <strong>ChargingNC</strong>
+                <span>Johnson County, North Carolina</span>
+                <a href="tel:9199804074">(919) 980-4074</a>
+                <a href="mailto:[email protected]">[email protected]</a>
+            </div>
+            <div>
+                <p style="color: var(--text-dim); font-size: 0.9rem;">
+                    © 2026 ChargingNC. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
